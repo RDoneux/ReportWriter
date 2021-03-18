@@ -4,12 +4,17 @@ import backend.ReportDetails;
 import backend.ReportManager;
 import org.jdatepicker.JDatePicker;
 
-
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.io.File;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 public class ReportInformationCollector extends JPanel {
 
@@ -24,15 +29,20 @@ public class ReportInformationCollector extends JPanel {
     private final JCheckBox portfolio;
     private final JComboBox<Integer> theoryAssessment;
 
+    private final JCheckBox openDocumentOnceCreated;
+    private final JFileChooser fileChooser;
     private final JLabel errorMessage;
 
-    private final JButton createReport;
+    private static final String DEFAULT_FILE_LOCATION = "DEFAULT_FILE_LOCATION";
+    private final JLabel fileLocationDisplay;
+    private String fileLocation;
 
-    private final Dimension preferredTextFieldSize = new Dimension(190, 25);
+    private final JButton createReport;
 
     public ReportInformationCollector() {
 
         setBackground(Color.WHITE);
+        Dimension preferredTextFieldSize = new Dimension(190, 25);
 
         participantName = new JTextField();
         participantName.setPreferredSize(preferredTextFieldSize);
@@ -48,6 +58,8 @@ public class ReportInformationCollector extends JPanel {
 
         courseDate = new JDatePicker();
         courseDate.setPreferredSize(preferredTextFieldSize);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
+        courseDate.getFormattedTextField().setText(LocalDateTime.now().format(formatter));
 
         auditBasedInterventions = new JCheckBox("Audit-Based Interventions");
         auditBasedInterventions.setHorizontalTextPosition(SwingConstants.LEFT);
@@ -67,16 +79,50 @@ public class ReportInformationCollector extends JPanel {
         }
 
         createReport = new JButton("Build Report");
-        createReport.addActionListener(e -> {
-            try {
-                generateReport();
-            } catch (ParseException parseException) {
-                parseException.printStackTrace();
-            }
-        });
+        createReport.addActionListener(e -> generateReport());
 
         errorMessage = new JLabel();
         errorMessage.setForeground(Color.RED);
+
+        openDocumentOnceCreated = new JCheckBox("ODoC");
+        openDocumentOnceCreated.setOpaque(false);
+        openDocumentOnceCreated.setSelected(true);
+
+        fileLocationDisplay = new JLabel(shortenString(DEFAULT_FILE_LOCATION));
+        fileLocation = DEFAULT_FILE_LOCATION;
+        fileLocationDisplay.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                //EMPTY
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+                fileChooser.showOpenDialog(null);
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                //EMPTY
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                fileLocationDisplay.setForeground(Color.BLUE);
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                fileLocationDisplay.setForeground(Color.BLACK);
+            }
+        });
+
+        fileChooser = new JFileChooser();
+        fileChooser.addActionListener(e -> {
+            fileLocation = fileChooser.getSelectedFile().getAbsolutePath() + "\\FeedbackForm.docx";
+            fileLocationDisplay.setText(shortenString(fileChooser.getSelectedFile().getAbsolutePath()));
+        });
 
         setLayout(new GridBagLayout());
 
@@ -98,12 +144,20 @@ public class ReportInformationCollector extends JPanel {
         add(new JLabel("Course Attended: "), c);
 
         c.gridy = 3;
-        add(new JLabel("Course Date: "), c);
-
-        c.gridy = 4;
         add(new JLabel("Co-Trainer: "), c);
 
-        c.gridwidth = 2;
+        c.gridy = 4;
+        add(new JLabel("Course Date: "), c);
+
+        c.gridy = 6;
+        c.anchor = GridBagConstraints.WEST;
+        add(openDocumentOnceCreated, c);
+
+        c.gridy = 7;
+        add(fileLocationDisplay, c);
+
+        c.anchor = GridBagConstraints.EAST;
+        c.gridx = 1;
         c.gridy = 5;
         add(auditBasedInterventions, c);
 
@@ -113,9 +167,7 @@ public class ReportInformationCollector extends JPanel {
         c.gridy = 7;
         add(portfolio, c);
 
-        c.gridwidth = 1;
         c.gridy = 8;
-        c.gridx = 1;
         add(theoryAssessment, c);
         c.anchor = GridBagConstraints.WEST;
         add(new JLabel("Theory Assessment: "), c);
@@ -143,38 +195,71 @@ public class ReportInformationCollector extends JPanel {
         add(courseAttended, c);
 
         c.gridy = 3;
-        add(courseDate, c);
+        add(coTrainer, c);
 
         c.gridy = 4;
-        add(coTrainer, c);
+        add(courseDate, c);
 
     }
 
-    private void generateReport() throws ParseException {
+    private String shortenString(String string) {
+        return (string.length() > 12) ? "..." + string.substring(string.length() - 12) : string;
+    }
+
+    private void generateReport() {
 
         if (participantName.getText().isEmpty() || organisation.getText().isEmpty() || courseAttended.getText().isEmpty() || courseDate.getFormattedTextField().getText().isEmpty() || coTrainer.getText().isEmpty()) {
             errorMessage.setText("Empty fields detected");
             return;
         }
+        if (fileLocation.equals(DEFAULT_FILE_LOCATION)) {
+            errorMessage.setText("Default file location");
+            return;
+        }
+        if(!new File(fileLocation).getParentFile().exists()){
+            errorMessage.setText("File location doesn't exist");
+            return;
+        }
 
         errorMessage.setText("");
-        ReportDetails details = ReportDetails.builder()
-                .participantName(participantName.getText())
-                .organisation(organisation.getText())
-                .courseAttended(courseAttended.getText())
-                .courseDate(new SimpleDateFormat("dd/MM/yyyy").format(new SimpleDateFormat("dd MMM yyyy").parse(courseDate.getFormattedTextField().getText())))
-                .coTrainer(coTrainer.getText())
-                .auditBasedInterventions(auditBasedInterventions.isSelected())
-                .presentation(presentation.isSelected())
-                .portfolio(portfolio.isSelected())
-                .theoryAssessment(Integer.valueOf(theoryAssessment.getSelectedItem().toString()))
-                .saveLocation("C:\\Users\\R.Doneux\\OneDrive - The Loddon School\\Desktop\\TestDocument.docx")
-                .build();
+        createReport.setEnabled(false);
 
-        participantName.setText("");
-        organisation.setText("");
+        participantName.requestFocus();
 
-        new ReportManager().generateReport(details);
+        new Thread(() -> {
+            ReportDetails details = null;
+            try {
+                details = ReportDetails.builder()
+                        .participantName(participantName.getText())
+                        .organisation(organisation.getText())
+                        .courseAttended(courseAttended.getText())
+                        .courseDate(new SimpleDateFormat("dd/MM/yyyy").format(new SimpleDateFormat("dd MMM yyyy").parse(courseDate.getFormattedTextField().getText())))
+                        .coTrainer(coTrainer.getText())
+                        .auditBasedInterventions(auditBasedInterventions.isSelected())
+                        .presentation(presentation.isSelected())
+                        .portfolio(portfolio.isSelected())
+                        .theoryAssessment(Integer.valueOf(theoryAssessment.getSelectedItem().toString()))
+                        .saveLocation(fileLocation)
+                        .build();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            participantName.setText("");
+            organisation.setText("");
+
+            new ReportManager().generateReport(Objects.requireNonNull(details));
+
+            try {
+                if (openDocumentOnceCreated.isSelected()) {
+                    Desktop.getDesktop().open(new File(details.getSaveLocation()));
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            createReport.setEnabled(true);
+        }).start();
 
     }
 

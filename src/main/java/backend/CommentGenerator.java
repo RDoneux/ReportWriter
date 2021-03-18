@@ -11,7 +11,6 @@ public class CommentGenerator {
     private String courseDate;
     private String overallOutcome;
     private Integer grade;
-    private Boolean portfolio;
 
     private ArrayList<String> openingStatements;
     private MultipleEntityMap<Integer, String> theoryAssessmentStatements;
@@ -72,7 +71,6 @@ public class CommentGenerator {
         this.courseDate = _courseDate;
         this.overallOutcome = _overallOutcome;
         this.grade = _grade;
-        this.portfolio = _portfolio;
 
         Random r = new Random();
 
@@ -80,7 +78,7 @@ public class CommentGenerator {
                 formatter(theoryAssessmentStatements.getRandom(getAppropriateTheoryAssessmentScore(grade))) +
                 formatter(physicalInterventionStatements.get(r.nextInt(physicalInterventionStatements.size()))) +
                 System.getProperty("line.separator") +
-                formatter(portfolioStatements.getRandom((portfolio) ? "Pass" : "Refer")) +
+                formatter(portfolioStatements.getRandom((_portfolio) ? "Pass" : "Refer")) +
                 System.getProperty("line.separator") +
                 formatter(closingStatements.getRandom(overallOutcome));
     }

@@ -24,8 +24,4 @@ public class MultipleEntityMap <T, C> {
         return map.get(index).get(new Random().nextInt(map.get(index).size()));
     }
 
-    public List<C> get(T index){
-        return map.get(index);
-    }
-
 }

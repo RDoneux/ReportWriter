@@ -64,7 +64,7 @@ public class CommentGenerator {
 
     }
 
-    public String generateComments(String _overallOutcome, String _name, String _courseTitle, String _courseDate, Integer _grade, Boolean _portfolio) {
+    public String generateComments(String _overallOutcome, String _name, String _courseTitle, String _courseDate, Integer _grade, Boolean _portfolio, ReportComponents reportComponents) {
 
         this.instructorName = _name;
         this.courseTitle = _courseTitle;
@@ -74,13 +74,27 @@ public class CommentGenerator {
 
         Random r = new Random();
 
-        return formatter(openingStatements.get(r.nextInt(openingStatements.size()))) +
-                formatter(theoryAssessmentStatements.getRandom(getAppropriateTheoryAssessmentScore(grade))) +
-                formatter(physicalInterventionStatements.get(r.nextInt(physicalInterventionStatements.size()))) +
-                System.getProperty("line.separator") +
-                formatter(portfolioStatements.getRandom((_portfolio) ? "Pass" : "Refer")) +
-                System.getProperty("line.separator") +
-                formatter(closingStatements.getRandom(overallOutcome));
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(formatter(openingStatements.get(r.nextInt(openingStatements.size())) + " "));
+        if(reportComponents.getTheoryAssessment()) sb.append(formatter(theoryAssessmentStatements.getRandom(getAppropriateTheoryAssessmentScore(grade)) + " "));
+        if(reportComponents.getAuditBasedInterventions()) sb.append(formatter(physicalInterventionStatements.get(r.nextInt(physicalInterventionStatements.size())) + " "));
+        sb.append(System.getProperty("line.separator"));
+        if(reportComponents.getPortfolio()) {
+            sb.append(formatter(portfolioStatements.getRandom((_portfolio) ? "Pass" : "Refer") + " "));
+            sb.append(System.getProperty("line.separator"));
+        }
+        sb.append(formatter(closingStatements.getRandom(overallOutcome)));
+
+        return sb.toString();
+
+//        return formatter(openingStatements.get(r.nextInt(openingStatements.size()))) + " " +
+//                formatter(theoryAssessmentStatements.getRandom(getAppropriateTheoryAssessmentScore(grade))) + " " +
+//                formatter(physicalInterventionStatements.get(r.nextInt(physicalInterventionStatements.size()))) + " " +
+//                System.getProperty("line.separator") +
+//                formatter(portfolioStatements.getRandom((_portfolio) ? "Pass" : "Refer")) + " " +
+//                System.getProperty("line.separator") +
+//                formatter(closingStatements.getRandom(overallOutcome));
     }
 
     private String formatter(String _input) {

@@ -15,6 +15,8 @@ public class ReportDetailsBuilder {
 
     private String saveLocation;
 
+    private ReportComponents reportComponents;
+
     public ReportDetails build() {
         return new ReportDetails(this);
     }
@@ -69,6 +71,11 @@ public class ReportDetailsBuilder {
         return this;
     }
 
+    public ReportDetailsBuilder reportComponents (ReportComponents reportComponents){
+        this.reportComponents = reportComponents;
+        return this;
+    }
+
     public String getParticipantName() {
         return participantName;
     }
@@ -107,5 +114,9 @@ public class ReportDetailsBuilder {
 
     public String getSaveLocation() {
         return saveLocation;
+    }
+
+    public ReportComponents getReportComponents() {
+        return reportComponents;
     }
 }

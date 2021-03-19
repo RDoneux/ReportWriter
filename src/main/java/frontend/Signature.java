@@ -6,7 +6,7 @@ import java.awt.*;
 public class Signature extends JPanel {
 
     public Signature(){
-        setBackground(Color.WHITE);
+        setBackground(new Color(240, 240, 240));
         setLayout(new GridBagLayout());
         JLabel signature = new JLabel("created by Rob Doneux");
         signature.setFont(new Font("Lucida Console", Font.PLAIN, 8));

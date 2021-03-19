@@ -15,6 +15,8 @@ public class ReportDetails {
 
     private final String saveLocation;
 
+    private final ReportComponents reportComponents;
+
     public ReportDetails(ReportDetailsBuilder builder){
 
         this.participantName = builder.getParticipantName();
@@ -27,6 +29,7 @@ public class ReportDetails {
         this.portfolio = builder.getPortfolio();
         this.theoryAssessment = builder.getTheoryAssessment();
         this.saveLocation = builder.getSaveLocation();
+        this.reportComponents = builder.getReportComponents();
 
     }
 
@@ -72,5 +75,9 @@ public class ReportDetails {
 
     public String getSaveLocation() {
         return saveLocation;
+    }
+
+    public ReportComponents getReportComponents() {
+        return reportComponents;
     }
 }

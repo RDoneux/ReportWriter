@@ -1,4 +1,4 @@
-40~Congratulations on a perfect theory assessment score. This is clear evidence of your understanding of the PROACT-SCIPr-UK® curriculum and depth of knowledge.
-24~You achieved a%optional_score% score on your theory assessment, demonstrating a good understanding of the PROACT-SCIPr-UK® curriculum.
-20~Whilst your theory assessment was a little lower than expected, you achieved a pass mark overall. It would be beneficial to review some of the curriculum areas with which you struggled over the coming period.
-0~You did not pass your theory assessment during this course. You will need to contact Loddon Training & Consultancy to organise a re-test before you will receive your certificate.
+Perfect~Congratulations on a perfect theory assessment score. This is clear evidence of your understanding of the PROACT-SCIPr-UK® curriculum and depth of knowledge.
+Pass~You achieved a%optional_score% score on your theory assessment, demonstrating a good understanding of the PROACT-SCIPr-UK® curriculum.
+Borderline~Whilst your theory assessment was a little lower than expected, you achieved a pass mark overall. It would be beneficial to review some of the curriculum areas with which you struggled over the coming period.
+Refer~You did not pass your theory assessment during this course. You will need to contact Loddon Training & Consultancy to organise a re-test before you will receive your certificate.

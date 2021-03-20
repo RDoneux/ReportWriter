@@ -1,5 +1,7 @@
 package frontend;
 
+import backend.constant.SettingsConstant;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -11,13 +13,19 @@ public class ApplicationWindow {
     private final JFrame frame = new JFrame();
     private JPanel previousPanel;
 
-    public ApplicationWindow() {
+    public static ApplicationWindow applicationWindow;
 
+    private ApplicationWindow() {
+        //EMPTY
+    }
+
+    public void display() {
         frame.setTitle("Report Builder");
-        frame.setSize(new Dimension(322, 315));
-        frame.setResizable(false);
+        frame.setSize(new Dimension(Integer.parseInt(SettingsConstant.get("Window Width")),
+                Integer.parseInt(SettingsConstant.get("Window Height"))));
+        frame.setResizable(Boolean.parseBoolean(SettingsConstant.get("Resizable Window")));
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        frame.setLocation(new Point(30,30));
+        frame.setLocation(new Point(30, 30));
         frame.setVisible(true);
         frame.setLayout(new BorderLayout());
 
@@ -32,7 +40,13 @@ public class ApplicationWindow {
 
         frame.revalidate();
         frame.repaint();
+    }
 
+    public static ApplicationWindow getInstance() {
+        if (applicationWindow == null) {
+            applicationWindow = new ApplicationWindow();
+        }
+        return applicationWindow;
     }
 
     public void add(JPanel panel) {
@@ -41,6 +55,12 @@ public class ApplicationWindow {
         }
         previousPanel = panel;
         frame.add(panel, BorderLayout.CENTER);
+        frame.revalidate();
+        frame.repaint();
+    }
+
+    public JFrame getFrame() {
+        return frame;
     }
 
 }

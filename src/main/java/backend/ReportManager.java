@@ -1,5 +1,6 @@
 package backend;
 
+import backend.constant.SettingsConstant;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.util.Units;
@@ -73,14 +74,18 @@ public class ReportManager {
         XWPFTableCell theoryAssessmentOutcome = _target.getRow(4).getCell(2);
         XWPFTableCell overallOutcome = _target.getRow(5).getCell(1);
 
+        int theoryAssessmentTotal = Integer.parseInt(SettingsConstant.get("Test Total"));
+        double theoryAssessmentPassMark = Double.parseDouble(SettingsConstant.get("Test Pass Mark"));
+        double theoryAssessmentBorderlinePassMark = Double.parseDouble(SettingsConstant.get("Test Borderline Pass Mark"));
+
         pi.setText((_reportComponents.getAuditBasedInterventions()) ? (_pi) ? "Pass" : "Refer" : "N/A");
         presentation.setText((_reportComponents.getPresentation()) ? (_presentation) ? "Pass" : "Refer" : "N/A");
         portfolio.setText((_reportComponents.getPortfolio()) ? (_portfolio) ? "Pass" : "Refer" : "N/A");
         theoryAssessmentScore.setText((_reportComponents.getTheoryAssessment()) ? _theoryAssessment + " / 40" : "N/A");
         if (_reportComponents.getTheoryAssessment()) {
-            if (_theoryAssessment > (0.6 * 40)) theoryAssessmentOutcome.setText("Pass");
-            else if (_theoryAssessment > (0.5 * 40)) theoryAssessmentOutcome.setText("Borderline Pass");
-            else if (_theoryAssessment < (0.5 * 40)) theoryAssessmentOutcome.setText("Refer");
+            if (_theoryAssessment > (theoryAssessmentPassMark * theoryAssessmentTotal)) theoryAssessmentOutcome.setText("Pass");
+            else if (_theoryAssessment > (theoryAssessmentBorderlinePassMark * theoryAssessmentTotal)) theoryAssessmentOutcome.setText("Borderline Pass");
+            else if (_theoryAssessment < (theoryAssessmentBorderlinePassMark * theoryAssessmentTotal)) theoryAssessmentOutcome.setText("Refer");
         } else {
             theoryAssessmentOutcome.setText("");
         }
@@ -88,7 +93,8 @@ public class ReportManager {
         boolean overallOutcomeBoolean = true;
         if (_reportComponents.getAuditBasedInterventions() && !_pi) overallOutcomeBoolean = false;
         if (_reportComponents.getPresentation() && !_presentation) overallOutcomeBoolean = false;
-        if (_reportComponents.getTheoryAssessment() && !(_theoryAssessment > (0.5 * 40))) overallOutcomeBoolean = false;
+        if (_reportComponents.getTheoryAssessment() && !(_theoryAssessment > (theoryAssessmentBorderlinePassMark * theoryAssessmentTotal)))
+            overallOutcomeBoolean = false;
 
         overallOutcome.setText((overallOutcomeBoolean) ? "Pass" : "Refer");
 

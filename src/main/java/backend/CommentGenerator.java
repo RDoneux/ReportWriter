@@ -1,8 +1,13 @@
 package backend;
 
+import backend.constant.SettingsConstant;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Objects;
+import java.util.Random;
+import java.util.Scanner;
 
 public class CommentGenerator {
 
@@ -13,7 +18,7 @@ public class CommentGenerator {
     private Integer grade;
 
     private ArrayList<String> openingStatements;
-    private MultipleEntityMap<Integer, String> theoryAssessmentStatements;
+    private MultipleEntityMap<String, String> theoryAssessmentStatements;
     private ArrayList<String> physicalInterventionStatements;
     private MultipleEntityMap<String, String> portfolioStatements;
     private MultipleEntityMap<String, String> closingStatements;
@@ -23,29 +28,33 @@ public class CommentGenerator {
     }
 
     private void read() {
-        Scanner scan = new Scanner(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("responses/OpeningStatements.txt")));
+        Scanner scan = new Scanner(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream(
+                "responses/OpeningStatements.txt")));
         openingStatements = new ArrayList<>();
         while (scan.hasNext()) {
             String line = scan.nextLine();
             if (line.startsWith("##")) continue;
             openingStatements.add(line);
         }
-        scan = new Scanner(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("responses/TheoryAssessmentStatements.txt")));
+        scan = new Scanner(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("responses" +
+                "/TheoryAssessmentStatements.txt")));
         theoryAssessmentStatements = new MultipleEntityMap<>();
         while (scan.hasNext()) {
             String line = scan.nextLine();
             if (line.startsWith("##")) continue;
             String[] splitLine = line.split("~");
-            theoryAssessmentStatements.add(Integer.parseInt(splitLine[0]), splitLine[1]);
+            theoryAssessmentStatements.add(splitLine[0], splitLine[1]);
         }
-        scan = new Scanner(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("responses/Audit-basedInterventionStatements.txt")));
+        scan = new Scanner(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("responses" +
+                "/Audit-basedInterventionStatements.txt")));
         physicalInterventionStatements = new ArrayList<>();
         while (scan.hasNext()) {
             String line = scan.nextLine();
             if (line.startsWith("##")) continue;
             physicalInterventionStatements.add(line);
         }
-        scan = new Scanner(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("responses/PortfolioStatements.txt")));
+        scan = new Scanner(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("responses" +
+                "/PortfolioStatements.txt")));
         portfolioStatements = new MultipleEntityMap<>();
         while (scan.hasNext()) {
             String line = scan.nextLine();
@@ -53,7 +62,8 @@ public class CommentGenerator {
             String[] splitLine = line.split("~");
             portfolioStatements.add(splitLine[0], splitLine[1]);
         }
-        scan = new Scanner(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("responses/ClosingStatements.txt")));
+        scan = new Scanner(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("responses" +
+                "/ClosingStatements.txt")));
         closingStatements = new MultipleEntityMap<>();
         while (scan.hasNext()) {
             String line = scan.nextLine();
@@ -64,7 +74,8 @@ public class CommentGenerator {
 
     }
 
-    public String generateComments(String _overallOutcome, String _name, String _courseTitle, String _courseDate, Integer _grade, Boolean _portfolio, ReportComponents reportComponents) {
+    public String generateComments(String _overallOutcome, String _name, String _courseTitle, String _courseDate,
+                                   Integer _grade, Boolean _portfolio, ReportComponents reportComponents) {
 
         this.instructorName = _name;
         this.courseTitle = _courseTitle;
@@ -77,10 +88,13 @@ public class CommentGenerator {
         StringBuilder sb = new StringBuilder();
 
         sb.append(formatter(openingStatements.get(r.nextInt(openingStatements.size())) + " "));
-        if(reportComponents.getTheoryAssessment()) sb.append(formatter(theoryAssessmentStatements.getRandom(getAppropriateTheoryAssessmentScore(grade)) + " "));
-        if(reportComponents.getAuditBasedInterventions()) sb.append(formatter(physicalInterventionStatements.get(r.nextInt(physicalInterventionStatements.size())) + " "));
+        if (reportComponents.getTheoryAssessment())
+            sb.append(formatter(theoryAssessmentStatements.getRandom(getAppropriateTheoryAssessmentScore(grade)) + " "
+            ));
+        if (reportComponents.getAuditBasedInterventions())
+            sb.append(formatter(physicalInterventionStatements.get(r.nextInt(physicalInterventionStatements.size())) + " "));
         sb.append(System.getProperty("line.separator"));
-        if(reportComponents.getPortfolio()) {
+        if (reportComponents.getPortfolio()) {
             sb.append(formatter(portfolioStatements.getRandom((_portfolio) ? "Pass" : "Refer") + " "));
             sb.append(System.getProperty("line.separator"));
         }
@@ -88,13 +102,6 @@ public class CommentGenerator {
 
         return sb.toString();
 
-//        return formatter(openingStatements.get(r.nextInt(openingStatements.size()))) + " " +
-//                formatter(theoryAssessmentStatements.getRandom(getAppropriateTheoryAssessmentScore(grade))) + " " +
-//                formatter(physicalInterventionStatements.get(r.nextInt(physicalInterventionStatements.size()))) + " " +
-//                System.getProperty("line.separator") +
-//                formatter(portfolioStatements.getRandom((_portfolio) ? "Pass" : "Refer")) + " " +
-//                System.getProperty("line.separator") +
-//                formatter(closingStatements.getRandom(overallOutcome));
     }
 
     private String formatter(String _input) {
@@ -112,11 +119,12 @@ public class CommentGenerator {
                     segment = (overallOutcome.equals("Pass") ? "" : " overall");
                     break;
                 case "optional_score":
-                    if (grade > 24) segment = " pass";
-                    if (grade >= 30) segment = " good";
-                    if (grade >= 35) segment = "n excellent";
-                    if (grade >= 38) segment = " near perfect";
-                    if (grade == 40) segment = " perfect";
+                    int testTotal = Integer.parseInt(SettingsConstant.get("Test Total"));
+                    if (grade > (Double.parseDouble(SettingsConstant.get("Test Pass Mark")) * testTotal)) segment = " pass";
+                    if (grade >= 0.8 * testTotal) segment = " good";
+                    if (grade >= 0.85 * testTotal) segment = "n excellent";
+                    if (grade >= 0.95 * testTotal) segment = " near perfect";
+                    if (grade == (Double.parseDouble(SettingsConstant.get("Test Pass Mark")))) segment = " perfect";
                     break;
                 case "deadline_date":
                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -131,11 +139,13 @@ public class CommentGenerator {
         return sb.toString();
     }
 
-    private Integer getAppropriateTheoryAssessmentScore(int score) {
-        if (score < 0 || score > 40) throw new IllegalArgumentException("score is outside of bounds");
-        if (score == 40) return 40;
-        if (score > 24) return 24;
-        if (score >= 20) return 20;
-        return 0;
+    private String getAppropriateTheoryAssessmentScore(int score) {
+        if (score < 0 || score > Integer.parseInt(SettingsConstant.get("Test Total")))
+            throw new IllegalArgumentException("score is outside of bounds");
+        if (score == Integer.parseInt(SettingsConstant.get("Test Total"))) return "Perfect";
+        if (score > Double.parseDouble(SettingsConstant.get("Test Pass Mark")) * Integer.parseInt(SettingsConstant.get("Test Total"))) return "Pass";
+        System.out.println((SettingsConstant.get("Test Borderline Pass Mark")) + " : "+ (SettingsConstant.get("Test Total")));
+        if (score >= Double.parseDouble(SettingsConstant.get("Test Borderline Pass Mark")) * Integer.parseInt(SettingsConstant.get("Test Total"))) return "Borderline";
+        return "Refer";
     }
 }

@@ -3,10 +3,14 @@ package frontend;
 import backend.ReportComponents;
 import backend.ReportDetails;
 import backend.ReportManager;
+import backend.constant.SettingsConstant;
+import frontend.setting.SettingsButton;
 import org.jdatepicker.JDatePicker;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
@@ -28,14 +32,14 @@ public class ReportInformationCollector extends JPanel {
     private final JCheckBox auditBasedInterventions;
     private final JCheckBox presentation;
     private final JCheckBox portfolio;
-    private final JComboBox<Integer> theoryAssessment;
+    private static JComboBox<Integer> theoryAssessment;
     private final JLabel theoryAssessmentDisplay;
 
     private final JCheckBox openDocumentOnceCreated;
     private final JFileChooser fileChooser;
     private final JLabel errorMessage;
 
-    private static final String DEFAULT_FILE_LOCATION = "DEFAULT_FILE_LOCATION";
+    public static final String DEFAULT_FILE_LOCATION = "DEFAULT_FILE_LOCATION";
     private final JLabel fileLocationDisplay;
     private String fileLocation;
 
@@ -74,7 +78,7 @@ public class ReportInformationCollector extends JPanel {
 
             @Override
             public void mousePressed(MouseEvent e) {
-                if(SwingUtilities.isRightMouseButton(e)){
+                if (SwingUtilities.isRightMouseButton(e)) {
                     auditBasedInterventions.setEnabled(!auditBasedInterventions.isEnabled());
                 }
             }
@@ -106,7 +110,7 @@ public class ReportInformationCollector extends JPanel {
 
             @Override
             public void mousePressed(MouseEvent e) {
-                if(SwingUtilities.isRightMouseButton(e)){
+                if (SwingUtilities.isRightMouseButton(e)) {
                     presentation.setEnabled(!presentation.isEnabled());
                 }
             }
@@ -138,7 +142,7 @@ public class ReportInformationCollector extends JPanel {
 
             @Override
             public void mousePressed(MouseEvent e) {
-                if(SwingUtilities.isRightMouseButton(e)){
+                if (SwingUtilities.isRightMouseButton(e)) {
                     portfolio.setEnabled(!portfolio.isEnabled());
                 }
             }
@@ -168,9 +172,9 @@ public class ReportInformationCollector extends JPanel {
 
             @Override
             public void mousePressed(MouseEvent e) {
-                if(SwingUtilities.isRightMouseButton(e)){
+                if (SwingUtilities.isRightMouseButton(e)) {
                     theoryAssessment.setEnabled(!theoryAssessment.isEnabled());
-                    if(theoryAssessment.isEnabled()){
+                    if (theoryAssessment.isEnabled()) {
                         theoryAssessmentDisplay.setForeground(Color.BLACK);
                     } else {
                         theoryAssessmentDisplay.setForeground(Color.LIGHT_GRAY);
@@ -195,6 +199,7 @@ public class ReportInformationCollector extends JPanel {
         });
 
         theoryAssessment = new JComboBox<>();
+        setUpTheoryAssessmentScore();
         theoryAssessment.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -203,9 +208,9 @@ public class ReportInformationCollector extends JPanel {
 
             @Override
             public void mousePressed(MouseEvent e) {
-                if(SwingUtilities.isRightMouseButton(e)){
+                if (SwingUtilities.isRightMouseButton(e)) {
                     theoryAssessment.setEnabled(!theoryAssessment.isEnabled());
-                    if(theoryAssessment.isEnabled()){
+                    if (theoryAssessment.isEnabled()) {
                         theoryAssessmentDisplay.setForeground(Color.BLACK);
                     } else {
                         theoryAssessmentDisplay.setForeground(Color.LIGHT_GRAY);
@@ -228,9 +233,6 @@ public class ReportInformationCollector extends JPanel {
 
             }
         });
-        for (int i = 0; i < 40; i++) {
-            theoryAssessment.addItem(i);
-        }
 
         createReport = new JButton("Build Report");
         createReport.addActionListener(e -> generateReport());
@@ -240,10 +242,14 @@ public class ReportInformationCollector extends JPanel {
 
         openDocumentOnceCreated = new JCheckBox("ODoC");
         openDocumentOnceCreated.setOpaque(false);
-        openDocumentOnceCreated.setSelected(true);
+        openDocumentOnceCreated.setSelected(Boolean.parseBoolean(SettingsConstant.get("Open Document on Creation")));
+        openDocumentOnceCreated.addActionListener(e -> {
+            SettingsConstant.add("Open Document on Creation", String.valueOf(openDocumentOnceCreated.isSelected()));
+            SettingsConstant.save();
+        });
 
-        fileLocationDisplay = new JLabel(shortenString(DEFAULT_FILE_LOCATION));
-        fileLocation = DEFAULT_FILE_LOCATION;
+        fileLocationDisplay = new JLabel(shortenString(SettingsConstant.get("File Location")));
+        fileLocation = SettingsConstant.get("File Location");
         fileLocationDisplay.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -276,6 +282,8 @@ public class ReportInformationCollector extends JPanel {
         fileChooser.addActionListener(e -> {
             fileLocation = fileChooser.getSelectedFile().getAbsolutePath() + "\\FeedbackForm.docx";
             fileLocationDisplay.setText(shortenString(fileChooser.getSelectedFile().getAbsolutePath()));
+            SettingsConstant.add("File Location", fileChooser.getSelectedFile().getAbsolutePath());
+            SettingsConstant.save();
         });
 
         setLayout(new GridBagLayout());
@@ -304,10 +312,16 @@ public class ReportInformationCollector extends JPanel {
         add(new JLabel("Course Date: "), c);
 
         c.gridy = 6;
-        c.anchor = GridBagConstraints.WEST;
+        c.anchor = GridBagConstraints.EAST;
         add(openDocumentOnceCreated, c);
 
+        c.anchor = GridBagConstraints.WEST;
+        c.gridx = 0;
+        c.gridwidth = 1;
+        add(new SettingsButton(), c);
+
         c.gridy = 7;
+        //c.anchor = GridBagConstraints.WEST;
         add(fileLocationDisplay, c);
 
         c.anchor = GridBagConstraints.EAST;
@@ -360,6 +374,14 @@ public class ReportInformationCollector extends JPanel {
         return (string.length() > 12) ? "..." + string.substring(string.length() - 12) : string;
     }
 
+    public static void setUpTheoryAssessmentScore(){
+        theoryAssessment.removeAllItems();
+        for (int i = 0; i <= Integer.parseInt(SettingsConstant.get("Test Total")); i++) {
+            theoryAssessment.addItem(i);
+        }
+    }
+
+
     private void generateReport() {
 
         if (participantName.getText().isEmpty() || organisation.getText().isEmpty() || courseAttended.getText().isEmpty() || courseDate.getFormattedTextField().getText().isEmpty() || coTrainer.getText().isEmpty()) {
@@ -393,8 +415,9 @@ public class ReportInformationCollector extends JPanel {
                         .presentation(presentation.isSelected())
                         .portfolio(portfolio.isSelected())
                         .theoryAssessment(Integer.valueOf(theoryAssessment.getSelectedItem().toString()))
-                        .saveLocation(fileLocation)
-                        .reportComponents(new ReportComponents(portfolio.isEnabled(), theoryAssessment.isEnabled(), auditBasedInterventions.isEnabled(), presentation.isEnabled()))
+                        .saveLocation(fileLocation + "\\" + participantName.getText() + " Feedback.docx")
+                        .reportComponents(new ReportComponents(portfolio.isEnabled(), theoryAssessment.isEnabled(),
+                                auditBasedInterventions.isEnabled(), presentation.isEnabled()))
                         .build();
             } catch (ParseException e) {
                 e.printStackTrace();

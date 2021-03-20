@@ -1,3 +1,4 @@
+import backend.constant.SettingsConstant;
 import frontend.ApplicationWindow;
 
 public class Client {
@@ -7,7 +8,10 @@ public class Client {
     }
 
     public static void main(String[] args) {
-        new ApplicationWindow();
+        // load settings
+        SettingsConstant.getInstance().load();
+
+        ApplicationWindow.getInstance().display();
     }
 
 }

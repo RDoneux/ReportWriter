@@ -3,14 +3,8 @@ import frontend.ApplicationWindow;
 
 public class Client {
 
-    public Client() {
-        //EMPTY
-    }
-
     public static void main(String[] args) {
-        // load settings
-        SettingsConstant.getInstance().load();
-
+        SettingsConstant.getInstance().load(); // load settings
         ApplicationWindow.getInstance().display();
     }
 

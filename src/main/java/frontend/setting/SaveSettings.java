@@ -5,16 +5,21 @@ import frontend.ApplicationWindow;
 import frontend.ReportInformationCollector;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class SaveSettings extends JButton implements ActionListener {
 
-    private SettingsPage settingsPage;
+    private final SettingsPage settingsPage;
 
     public SaveSettings(SettingsPage settingsPage){
         this.settingsPage = settingsPage;
         setText("Save Settings");
+        setPreferredSize(new Dimension(142, 20));
+        setMaximumSize(new Dimension(142, 20));
+        setMinimumSize(new Dimension(142, 20));
+
         addActionListener(this);
     }
 

@@ -9,8 +9,6 @@ import org.jdatepicker.JDatePicker;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
@@ -73,7 +71,7 @@ public class ReportInformationCollector extends JPanel {
         auditBasedInterventions.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-
+                //EMPTY
             }
 
             @Override
@@ -85,17 +83,17 @@ public class ReportInformationCollector extends JPanel {
 
             @Override
             public void mouseReleased(MouseEvent e) {
-
+                //EMPTY
             }
 
             @Override
             public void mouseEntered(MouseEvent e) {
-
+                //EMPTY
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-
+                //EMPTY
             }
         });
 
@@ -105,7 +103,7 @@ public class ReportInformationCollector extends JPanel {
         presentation.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-
+                //EMPTY
             }
 
             @Override
@@ -117,17 +115,17 @@ public class ReportInformationCollector extends JPanel {
 
             @Override
             public void mouseReleased(MouseEvent e) {
-
+                //EMPTY
             }
 
             @Override
             public void mouseEntered(MouseEvent e) {
-
+                //EMPTY
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-
+                //EMPTY
             }
         });
 
@@ -137,7 +135,7 @@ public class ReportInformationCollector extends JPanel {
         portfolio.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-
+                //EMPTY
             }
 
             @Override
@@ -149,17 +147,17 @@ public class ReportInformationCollector extends JPanel {
 
             @Override
             public void mouseReleased(MouseEvent e) {
-
+                //EMPTY
             }
 
             @Override
             public void mouseEntered(MouseEvent e) {
-
+                //EMPTY
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-
+                //EMPTY
             }
         });
 
@@ -167,7 +165,7 @@ public class ReportInformationCollector extends JPanel {
         theoryAssessmentDisplay.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-
+                //EMPTY
             }
 
             @Override
@@ -184,26 +182,25 @@ public class ReportInformationCollector extends JPanel {
 
             @Override
             public void mouseReleased(MouseEvent e) {
-
+                //EMPTY
             }
 
             @Override
             public void mouseEntered(MouseEvent e) {
-
+                //EMPTY
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-
+                //EMPTY
             }
         });
 
-        theoryAssessment = new JComboBox<>();
         setUpTheoryAssessmentScore();
         theoryAssessment.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-
+                //EMPTY
             }
 
             @Override
@@ -220,17 +217,17 @@ public class ReportInformationCollector extends JPanel {
 
             @Override
             public void mouseReleased(MouseEvent e) {
-
+                //EMPTY
             }
 
             @Override
             public void mouseEntered(MouseEvent e) {
-
+                //EMPTY
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-
+                //EMPTY
             }
         });
 
@@ -244,8 +241,9 @@ public class ReportInformationCollector extends JPanel {
         openDocumentOnceCreated.setOpaque(false);
         openDocumentOnceCreated.setSelected(Boolean.parseBoolean(SettingsConstant.get("Open Document on Creation")));
         openDocumentOnceCreated.addActionListener(e -> {
-            SettingsConstant.add("Open Document on Creation", String.valueOf(openDocumentOnceCreated.isSelected()));
-            SettingsConstant.save();
+            SettingsConstant.getInstance().add("Open Document on Creation",
+                    String.valueOf(openDocumentOnceCreated.isSelected()));
+            SettingsConstant.getInstance().save();
         });
 
         fileLocationDisplay = new JLabel(shortenString(SettingsConstant.get("File Location")));
@@ -282,8 +280,8 @@ public class ReportInformationCollector extends JPanel {
         fileChooser.addActionListener(e -> {
             fileLocation = fileChooser.getSelectedFile().getAbsolutePath() + "\\FeedbackForm.docx";
             fileLocationDisplay.setText(shortenString(fileChooser.getSelectedFile().getAbsolutePath()));
-            SettingsConstant.add("File Location", fileChooser.getSelectedFile().getAbsolutePath());
-            SettingsConstant.save();
+            SettingsConstant.getInstance().add("File Location", fileChooser.getSelectedFile().getAbsolutePath());
+            SettingsConstant.getInstance().save();
         });
 
         setLayout(new GridBagLayout());
@@ -321,7 +319,6 @@ public class ReportInformationCollector extends JPanel {
         add(new SettingsButton(), c);
 
         c.gridy = 7;
-        //c.anchor = GridBagConstraints.WEST;
         add(fileLocationDisplay, c);
 
         c.anchor = GridBagConstraints.EAST;
@@ -368,13 +365,16 @@ public class ReportInformationCollector extends JPanel {
         c.gridy = 4;
         add(courseDate, c);
 
+        ApplicationWindow.getInstance().getFrame().setTitle("Report Builder");
+
     }
 
     private String shortenString(String string) {
         return (string.length() > 12) ? "..." + string.substring(string.length() - 12) : string;
     }
 
-    public static void setUpTheoryAssessmentScore(){
+    public static void setUpTheoryAssessmentScore() {
+        if (theoryAssessment == null) theoryAssessment = new JComboBox<>();
         theoryAssessment.removeAllItems();
         for (int i = 0; i <= Integer.parseInt(SettingsConstant.get("Test Total")); i++) {
             theoryAssessment.addItem(i);

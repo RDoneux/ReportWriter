@@ -2,10 +2,10 @@ package backend;
 
 public class ReportComponents {
 
-    private Boolean portfolio;
-    private Boolean theoryAssessment;
-    private Boolean auditBasedInterventions;
-    private Boolean presentation;
+    private final boolean portfolio;
+    private final boolean theoryAssessment;
+    private final boolean auditBasedInterventions;
+    private final boolean presentation;
 
     public ReportComponents(Boolean portfolio, Boolean theoryAssessment, Boolean auditBasedInterventions,
                             Boolean presentation) {

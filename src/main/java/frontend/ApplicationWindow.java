@@ -13,7 +13,7 @@ public class ApplicationWindow {
     private final JFrame frame = new JFrame();
     private JPanel previousPanel;
 
-    public static ApplicationWindow applicationWindow;
+    private static ApplicationWindow applicationWindow;
 
     private ApplicationWindow() {
         //EMPTY

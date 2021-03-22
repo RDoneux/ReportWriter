@@ -7,19 +7,16 @@ import java.util.Scanner;
 
 public abstract class AbstractConstant {
 
-    protected static Map<String, String> constants;
+    protected static final Map<String, String> constants = new HashMap<>();
 
-    private static String filePath;
-    protected static String fileName;
+    private final String filePath = System.getProperty("user.dir") + "\\constants\\";
+    protected final String fileName;
 
     protected AbstractConstant(String fileName) {
-        filePath = System.getProperty("user.dir") + "\\constants\\";
         this.fileName = fileName;
-
-        constants = new HashMap<>();
     }
 
-    public static boolean read() {
+    public boolean read() {
         if (!new File(filePath + fileName + ".txt").exists()) return false;
         constants.clear();
         try {
@@ -36,7 +33,7 @@ public abstract class AbstractConstant {
         return false;
     }
 
-    public static void write() {
+    public void write() {
         try {
             File file = new File(filePath);
             if (!file.exists()) //noinspection ResultOfMethodCallIgnored
@@ -54,7 +51,7 @@ public abstract class AbstractConstant {
         }
     }
 
-    public static void add(String key, String constant) {
+    public void add(String key, String constant) {
         constants.put(key, constant);
     }
 
@@ -62,11 +59,11 @@ public abstract class AbstractConstant {
         return constants.get(key);
     }
 
-    public static void save(){
+    public void save(){
         write();
     }
 
-    public static void load(){
+    public void load(){
         if(!read()) write();
     }
 

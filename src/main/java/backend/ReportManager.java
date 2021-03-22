@@ -80,13 +80,13 @@ public class ReportManager {
         pi.setText(Boolean.TRUE.equals((inputReportContents.getAuditBasedInterventions())) ? (inputPi) ? "Pass" : "Refer" : "N/A");
         presentation.setText(Boolean.TRUE.equals((inputReportContents.getPresentation())) ? (inputPresentation) ? "Pass" : "Refer" : "N/A");
         portfolio.setText(Boolean.TRUE.equals((inputReportContents.getPortfolio())) ? (inputPortfolio) ? "Pass" : "Refer" : "N/A");
-        theoryAssessmentScore.setText(Boolean.TRUE.equals((inputReportContents.getTheoryAssessment())) ? inputTheoryAssessment + " / 40" : "N/A");
+        theoryAssessmentScore.setText(Boolean.TRUE.equals((inputReportContents.getTheoryAssessment())) ? inputTheoryAssessment + " / 40" : "");
         if (Boolean.TRUE.equals(inputReportContents.getTheoryAssessment())) {
             if (inputTheoryAssessment > (theoryAssessmentPassMark * theoryAssessmentTotal)) theoryAssessmentOutcome.setText("Pass");
             else if (inputTheoryAssessment > (theoryAssessmentBorderlinePassMark * theoryAssessmentTotal)) theoryAssessmentOutcome.setText("Borderline Pass");
             else if (inputTheoryAssessment < (theoryAssessmentBorderlinePassMark * theoryAssessmentTotal)) theoryAssessmentOutcome.setText("Refer");
         } else {
-            theoryAssessmentOutcome.setText("");
+            theoryAssessmentOutcome.setText("N/A");
         }
         // calculate overall outcome
         boolean overallOutcomeBoolean = true;

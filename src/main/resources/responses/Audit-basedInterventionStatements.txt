@@ -1,1 +1,1 @@
-PI~You were also able to demonstrate your knowledge of the audit-based intervention schedule during the assessment, choosing good teaching points and covering the relevant health and safety concerns.
+PI~You were %optional_also% able to demonstrate your knowledge of the audit-based intervention schedule during the assessment, choosing good teaching points and covering the relevant health and safety concerns.

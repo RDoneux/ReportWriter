@@ -257,6 +257,7 @@ public class ReportInformationCollector extends JPanel {
             @Override
             public void mousePressed(MouseEvent e) {
                 fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+                fileChooser.setSelectedFile(new File(fileLocation));
                 fileChooser.showOpenDialog(null);
             }
 
@@ -278,7 +279,8 @@ public class ReportInformationCollector extends JPanel {
 
         fileChooser = new JFileChooser();
         fileChooser.addActionListener(e -> {
-            fileLocation = fileChooser.getSelectedFile().getAbsolutePath() + "\\FeedbackForm.docx";
+            if(e.getActionCommand().equals("CancelSelection")) return;
+            fileLocation = fileChooser.getSelectedFile().getAbsolutePath();
             fileLocationDisplay.setText(shortenString(fileChooser.getSelectedFile().getAbsolutePath()));
             SettingsConstant.getInstance().add("File Location", fileChooser.getSelectedFile().getAbsolutePath());
             SettingsConstant.getInstance().save();
@@ -415,7 +417,7 @@ public class ReportInformationCollector extends JPanel {
                         .presentation(presentation.isSelected())
                         .portfolio(portfolio.isSelected())
                         .theoryAssessment(Integer.valueOf(theoryAssessment.getSelectedItem().toString()))
-                        .saveLocation(fileLocation + "\\" + participantName.getText() + " Feedback.docx")
+                        .saveLocation(fileLocation + "\\" + participantName.getText() + " ~ Record Sheet.docx")
                         .reportComponents(new ReportComponents(portfolio.isEnabled(), theoryAssessment.isEnabled(),
                                 auditBasedInterventions.isEnabled(), presentation.isEnabled()))
                         .build();

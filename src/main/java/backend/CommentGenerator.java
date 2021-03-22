@@ -19,6 +19,7 @@ public class CommentGenerator {
     private String courseDate;
     private String overallOutcome;
     private Integer grade;
+    private ReportComponents reportComponents;
 
     private MultipleEntityMap<String, String> openingStatements;
     private MultipleEntityMap<String, String> theoryAssessmentStatements;
@@ -40,7 +41,7 @@ public class CommentGenerator {
         }
     }
 
-    private void loadDefaultStatements(){
+    private void loadDefaultStatements() {
         Scanner scan = new Scanner(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream(
                 "responses/OpeningStatements.txt")));
         openingStatements = new MultipleEntityMap<>();
@@ -151,7 +152,8 @@ public class CommentGenerator {
         this.courseTitle = courseTitle;
         this.courseDate = courseDate;
         this.overallOutcome = overallOutcome;
-        if(!grade.equals("N/A")) this.grade = Integer.parseInt(grade);
+        this.reportComponents = reportComponents;
+        if (!grade.isEmpty()) this.grade = Integer.parseInt(grade);
 
         StringBuilder sb = new StringBuilder();
 
@@ -193,12 +195,16 @@ public class CommentGenerator {
                     if (grade >= 0.8 * testTotal) segment = " good";
                     if (grade >= 0.85 * testTotal) segment = "n excellent";
                     if (grade >= 0.95 * testTotal) segment = " near perfect";
-                    if (grade == (Double.parseDouble(SettingsConstant.get(TEST_PASS_MARK_STRING)))) segment = " perfect";
+                    if (grade == (Double.parseDouble(SettingsConstant.get(TEST_PASS_MARK_STRING))))
+                        segment = " perfect";
                     break;
                 case "deadline_date":
                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
                     LocalDate courseDateAsDate = LocalDate.parse(courseDate, formatter);
                     segment = " " + courseDateAsDate.plusMonths(1).format(formatter);
+                    break;
+                case "optional_also":
+                    segment = (Boolean.TRUE.equals(reportComponents.getTheoryAssessment())) ? " also " : "";
                     break;
                 default:
                     break;

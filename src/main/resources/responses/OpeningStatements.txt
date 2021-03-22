@@ -1,4 +1,4 @@
 OS~This was an excellent%course_title%%conditional_overall%%instructor_name%, well done.
-OS~Well done%instructor_name%, you have demonstrated an excellent set of values and attitudes that we would expect during a PROACT-SCIPr-UK® Course.
+OS~Well done%instructor_name%, you have demonstrated the positive values and attitudes that we would expect during a PROACT-SCIPr-UK® Course.
 OS~%instructor_name%, this was a great%course_title%%conditional_overall%, well done.
 OS~Well done%instructor_name%, you contributed with an informed perspective throughout the%course_title% course.

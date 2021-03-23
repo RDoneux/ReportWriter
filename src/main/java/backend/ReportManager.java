@@ -6,10 +6,9 @@ import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.util.Units;
 import org.apache.poi.xwpf.usermodel.*;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.Objects;
 
 public class ReportManager {
@@ -127,17 +126,23 @@ public class ReportManager {
             run.addCarriageReturn();
         }
 
-        generateSignature(target, 0, "Rob Doneux");
+        generateSignature(target, 0, SettingsConstant.get("Lead Instructor"));
         generateSignature(target, 1, coTrainer);
 
         XWPFParagraph signatureParagraph = target.getRow(3).getCell(0).getParagraphArray(0);
         XWPFRun signatureRun = signatureParagraph.createRun();
         signatureParagraph.setAlignment(ParagraphAlignment.CENTER);
-        InputStream is = this.getClass().getClassLoader().getResourceAsStream("signatures/RobDoneuxSignature.png");
-        signatureRun.addPicture(is, XWPFDocument.PICTURE_TYPE_PNG, "RobDoneuxSignature.png", Units.toEMU(125),
-                Units.toEMU(42));
-        assert is != null;
-        is.close();
+        if(SettingsConstant.get("Lead Instructor").equals("Rob Doneux")) {
+            InputStream is = this.getClass().getClassLoader().getResourceAsStream("signatures/RobDoneuxSignature.png");
+            signatureRun.addPicture(is, XWPFDocument.PICTURE_TYPE_PNG, "RobDoneuxSignature.png", Units.toEMU(125),
+                    Units.toEMU(42));
+            assert is != null;
+            is.close();
+        } else {
+            signatureRun.setFontFamily("French Script MT");
+            signatureRun.setFontSize(26);
+            signatureRun.setText(SettingsConstant.get("Lead Instructor"));
+        }
 
     }
 

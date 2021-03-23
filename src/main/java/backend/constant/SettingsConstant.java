@@ -14,9 +14,10 @@ public class SettingsConstant extends AbstractConstant {
         add("Test Borderline Pass Mark", "0.5");
         add("File Location", ReportInformationCollector.DEFAULT_FILE_LOCATION);
         add("Resizable Window", "false");
-        add("Window Width", "349");
+        add("Window Width", "375");
         add("Window Height", "330");
         add("Open Document on Creation", "true");
+        add("Lead Instructor", "Rob Doneux");
 
     }
 

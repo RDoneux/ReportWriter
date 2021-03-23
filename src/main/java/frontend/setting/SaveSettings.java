@@ -31,6 +31,7 @@ public class SaveSettings extends JButton implements ActionListener {
         constant.add("Test Borderline Pass Mark", settingsPage.getExamBorderlinePass().getText());
         constant.add("Window Width", settingsPage.getWindowX().getText());
         constant.add("Window Height", settingsPage.getWindowY().getText());
+        constant.add("Lead Instructor", settingsPage.getLeadInstructor().getText());
         constant.save();
         ReportInformationCollector.setUpTheoryAssessmentScore();
         ApplicationWindow.getInstance().add(new ReportInformationCollector());

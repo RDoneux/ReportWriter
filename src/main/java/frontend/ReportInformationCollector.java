@@ -296,6 +296,7 @@ public class ReportInformationCollector extends JPanel {
 
         GridBagConstraints c = new GridBagConstraints();
 
+        c.weighty = 1;
         c.anchor = GridBagConstraints.EAST;
         add(new JLabel("Candidate Name: "), c);
 
@@ -399,7 +400,8 @@ public class ReportInformationCollector extends JPanel {
             return;
         }
 
-        errorMessage.setText("");
+        errorMessage.setForeground(Color.DARK_GRAY);
+        errorMessage.setText("Working...");
         createReport.setEnabled(false);
 
         participantName.requestFocus();
@@ -428,7 +430,13 @@ public class ReportInformationCollector extends JPanel {
             participantName.setText("");
             organisation.setText("");
 
-            if(!new ReportManager().generateReport(Objects.requireNonNull(details))) errorMessage.setText("Error exporting file");
+            if(new ReportManager().generateReport(Objects.requireNonNull(details))) {
+                errorMessage.setForeground(Color.RED);
+                errorMessage.setText("");
+            } else {
+                errorMessage.setForeground(Color.RED);
+                errorMessage.setText("Error exporting file");
+            }
 
             try {
                 if (openDocumentOnceCreated.isSelected()) {

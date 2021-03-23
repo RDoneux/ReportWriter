@@ -22,6 +22,7 @@ public class SettingsPage extends JPanel {
     private final JTextField examBorderlinePass;
     private final JTextField windowX;
     private final JTextField windowY;
+    private final JTextField leadInstructor;
 
     private final JCheckBox resizable;
 
@@ -191,90 +192,106 @@ public class SettingsPage extends JPanel {
             }
         });
 
-        setLayout(new GridBagLayout());
+        leadInstructor = new JTextField(SettingsConstant.get("Lead Instructor"));
+        leadInstructor.setPreferredSize(preferredTextFieldSize);
+
+        JPanel displayPanel = new JPanel();
+        JScrollPane sp = new JScrollPane(displayPanel);
+        sp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        sp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+
+        displayPanel.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
 
         c.anchor = GridBagConstraints.WEST;
         c.insets = new Insets(0, 10, 0, 0);
-        add(backIcon, c);
+        displayPanel.add(backIcon, c);
 
         c.gridx = 0;
         c.gridy = 0;
         c.anchor = GridBagConstraints.EAST;
         c.insets = new Insets(0, 0, 0, 0);
-        add(new JLabel("Exam out of: "), c);
+        displayPanel.add(new JLabel("Exam out of: "), c);
 
         c.gridy = 1;
-        add(new JLabel("Pass: "), c);
+        displayPanel.add(new JLabel("Pass: "), c);
 
         c.gridy = 2;
-        add(new JLabel("Borderline pass: "), c);
+        displayPanel.add(new JLabel("Borderline pass: "), c);
 
         c.gridy = 3;
         c.gridwidth = 2;
         c.anchor = GridBagConstraints.CENTER;
-        add(new JLabel("---"), c);
+        displayPanel.add(new JLabel("---"), c);
 
         c.anchor = GridBagConstraints.EAST;
         c.gridwidth = 1;
         c.gridy = 4;
-        add(new JLabel("File Location: "), c);
+        displayPanel.add(new JLabel("File Location: "), c);
 
         c.gridy = 5;
-        add(new JLabel("Window Size: "), c);
+        displayPanel.add(new JLabel("Lead Instructor: "), c);
+
+        c.gridy = 6;
+        displayPanel.add(new JLabel("Window Size: "), c);
 
         c.gridwidth = 2;
-        c.gridy = 6;
-        add(resizable, c);
-
         c.gridy = 7;
-        c.gridwidth = 1;
-        add(new JLabel("Additional Comments: "), c);
+        displayPanel.add(resizable, c);
 
         c.gridy = 8;
-        add(additionalCommentOption, c);
+        c.gridwidth = 1;
+        displayPanel.add(new JLabel("Additional Comments: "), c);
+
+        c.gridy = 9;
+        displayPanel.add(additionalCommentOption, c);
 
         c.anchor = GridBagConstraints.WEST;
         c.gridx = 1;
         c.gridy = 0;
-        add(examOutOf, c);
+        displayPanel.add(examOutOf, c);
 
         c.gridy = 1;
-        add(examPass, c);
+        displayPanel.add(examPass, c);
 
         c.gridy = 2;
-        add(examBorderlinePass, c);
+        displayPanel.add(examBorderlinePass, c);
 
         c.gridy = 4;
-        add(fileLocation, c);
+        displayPanel.add(fileLocation, c);
 
         c.gridy = 5;
-        add(windowX, c);
+        displayPanel.add(leadInstructor, c);
+
+        c.gridy = 6;
+        displayPanel.add(windowX, c);
 
         c.anchor = GridBagConstraints.EAST;
-        add(windowY, c);
-
-        c.gridy = 8;
-        c.gridheight = 4;
-        c.fill = GridBagConstraints.BOTH;
-        add(additionalCommentArea, c);
+        displayPanel.add(windowY, c);
 
         c.gridy = 9;
+        c.gridheight = 4;
+        c.fill = GridBagConstraints.BOTH;
+        displayPanel.add(additionalCommentArea, c);
+
+        c.gridy = 10;
         c.gridx = 0;
         c.gridheight = 1;
         c.fill = GridBagConstraints.NONE;
-        add(keySelector, c);
+        displayPanel.add(keySelector, c);
 
-        c.gridy = 10;
-        add(commitComment, c);
+        c.gridy = 11;
+        displayPanel.add(commitComment, c);
 
         c.anchor = GridBagConstraints.WEST;
-        c.gridy = 11;
+        c.gridy = 12;
         c.gridx = 0;
         c.gridheight = 1;
         c.gridwidth = 2;
-        add(new SaveSettings(this), c);
+        displayPanel.add(new SaveSettings(this), c);
 
+        setLayout(new BorderLayout());
+        add(sp, BorderLayout.CENTER);
         ApplicationWindow.getInstance().getFrame().setTitle("Report Builder - Settings");
 
     }
@@ -297,5 +314,9 @@ public class SettingsPage extends JPanel {
 
     public JTextField getWindowY() {
         return windowY;
+    }
+
+    public JTextField getLeadInstructor() {
+        return leadInstructor;
     }
 }

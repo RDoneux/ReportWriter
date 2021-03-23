@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Locale;
 import java.util.Objects;
 import java.util.Scanner;
 
@@ -18,7 +17,6 @@ public class CommentGenerator {
     private String instructorName;
     private String courseTitle;
     private String courseDate;
-    private String physicalInterventionOutcome;
     private String overallOutcome;
     private Integer grade;
     private ReportComponents reportComponents;
@@ -158,7 +156,6 @@ public class CommentGenerator {
         this.instructorName = name;
         this.courseTitle = courseTitle;
         this.courseDate = courseDate;
-        this.physicalInterventionOutcome = physicalInterventionOutcome;
         this.overallOutcome = overallOutcome;
         this.reportComponents = reportComponents;
         if (!grade.isEmpty()) this.grade = Integer.parseInt(grade);

@@ -12,6 +12,10 @@ import java.util.Objects;
 
 public class SettingsButton extends JLabel implements MouseListener {
 
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
     private ImageIcon selected;
     private ImageIcon unselected;
 

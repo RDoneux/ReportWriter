@@ -17,6 +17,10 @@ import java.util.Objects;
 
 public class SettingsPage extends JPanel {
 
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
     private final JTextField examOutOf;
     private final JTextField examPass;
     private final JTextField examBorderlinePass;

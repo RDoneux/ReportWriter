@@ -21,6 +21,10 @@ import java.util.Objects;
 
 public class ReportInformationCollector extends JPanel {
 
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
     private final JTextField participantName;
     private final JTextField organisation;
     private final JTextField courseAttended;

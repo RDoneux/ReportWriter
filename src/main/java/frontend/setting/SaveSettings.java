@@ -11,6 +11,10 @@ import java.awt.event.ActionListener;
 
 public class SaveSettings extends JButton implements ActionListener {
 
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
     private final SettingsPage settingsPage;
 
     public SaveSettings(SettingsPage settingsPage){

@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.Scanner;
 
@@ -17,6 +18,7 @@ public class CommentGenerator {
     private String instructorName;
     private String courseTitle;
     private String courseDate;
+    private String physicalInterventionOutcome;
     private String overallOutcome;
     private Integer grade;
     private ReportComponents reportComponents;
@@ -145,12 +147,13 @@ public class CommentGenerator {
         }
     }
 
-    public String generateComments(String overallOutcome, String name, String courseTitle, String courseDate,
+    public String generateComments(String overallOutcome, String physicalInterventionOutcome, String name, String courseTitle, String courseDate,
                                    String grade, Boolean portfolio, ReportComponents reportComponents) {
 
         this.instructorName = name;
         this.courseTitle = courseTitle;
         this.courseDate = courseDate;
+        this.physicalInterventionOutcome = physicalInterventionOutcome;
         this.overallOutcome = overallOutcome;
         this.reportComponents = reportComponents;
         if (!grade.isEmpty()) this.grade = Integer.parseInt(grade);
@@ -162,7 +165,7 @@ public class CommentGenerator {
             sb.append(formatter(theoryAssessmentStatements.getRandom(getAppropriateTheoryAssessmentScore(this.grade)) + " "
             ));
         if (Boolean.TRUE.equals(reportComponents.getAuditBasedInterventions()))
-            sb.append(formatter(physicalInterventionStatements.getRandom("PI"))).append(" ");
+            sb.append(formatter(physicalInterventionStatements.getRandom(physicalInterventionOutcome))).append(" ");
         sb.append(System.getProperty("line.separator"));
         if (Boolean.TRUE.equals(reportComponents.getPortfolio())) {
             sb.append(formatter(portfolioStatements.getRandom((Boolean.TRUE.equals(portfolio)) ? "Pass" : "Refer") + " "));
@@ -205,6 +208,11 @@ public class CommentGenerator {
                     break;
                 case "optional_also":
                     segment = (Boolean.TRUE.equals(reportComponents.getTheoryAssessment())) ? " also " : "";
+                    break;
+                case "optional_time_frame":
+                    segment = "on your next PROACT-SCIPr-UK® course";
+                    if (courseTitle.toLowerCase().contains("re-certification") || courseTitle.equalsIgnoreCase("assessment day"))
+                        segment = "in a year's time";
                     break;
                 default:
                     break;

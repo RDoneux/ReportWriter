@@ -6,6 +6,7 @@ import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.util.Units;
 import org.apache.poi.xwpf.usermodel.*;
 
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,7 +18,7 @@ public class ReportManager {
         //EMPTY
     }
 
-    public void generateReport(ReportDetails reportDetails) {
+    public boolean generateReport(ReportDetails reportDetails) {
         try {
             XWPFDocument doc =
                     new XWPFDocument(OPCPackage.open(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("documents/General - Record Sheet V1.docx"))));
@@ -35,17 +36,23 @@ public class ReportManager {
             completeComments(comments, assessmentOutcome, details, reportDetails.getCoTrainer(),
                     reportDetails.getReportComponents());
 
-            save(doc, reportDetails.getSaveLocation());
+            return save(doc, reportDetails.getSaveLocation());
         } catch (IOException | InvalidFormatException e) {
             e.printStackTrace();
+            return false;
         }
     }
 
-    private void save(XWPFDocument document, String fileLocation) throws IOException {
-        FileOutputStream out = new FileOutputStream(fileLocation);
-        document.write(out);
-        out.close();
-        document.close();
+    private boolean save(XWPFDocument document, String fileLocation) throws IOException {
+        try {
+            FileOutputStream out = new FileOutputStream(fileLocation);
+            document.write(out);
+            out.close();
+            document.close();
+        } catch (FileNotFoundException e){
+            return false;
+        }
+        return true;
     }
 
     private void completeDetails(XWPFTable target, String inputName, String inputOrganisation, String inputCourseAttended,
@@ -104,6 +111,7 @@ public class ReportManager {
             InvalidFormatException {
 
         String overallOutcome = inputAssessmentOutcome.getRow(5).getCell(1).getText();
+        String auditBasedInterventionOutcome = inputAssessmentOutcome.getRow(1).getCell(1).getText();
         String instructorName = inputDetails.getRow(0).getCell(1).getText();
         String courseTitle = inputDetails.getRow(2).getCell(1).getText();
         String courseDate = inputDetails.getRow(3).getCell(1).getText();
@@ -111,7 +119,7 @@ public class ReportManager {
                 inputAssessmentOutcome.getRow(4).getCell(1).getText().split(" / ")[0];
         Boolean portfolioOutcome = (inputAssessmentOutcome.getRow(3).getCell(1)).getText().equals("Pass");
 
-        String[] paragraphs = new CommentGenerator().generateComments(overallOutcome, instructorName, courseTitle,
+        String[] paragraphs = new CommentGenerator().generateComments(overallOutcome, auditBasedInterventionOutcome, instructorName, courseTitle,
                 courseDate, theoryAssessmentScore, portfolioOutcome, reportComponents).split("\\r?\\n");
         for (String paragraph : paragraphs) {
             XWPFRun run = target.getRow(1).getCell(0).addParagraph().createRun();

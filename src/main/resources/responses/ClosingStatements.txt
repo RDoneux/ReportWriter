@@ -1,2 +1,2 @@
-Pass~We look forwards to seeing you again in a year's time. If you require any support in the meantime, please don't hesitate to contact us.
-Refer~We look forwards to hearing from you soon. If you require any support in the meantime, please don't hesitate to contact us.
+Pass~We look forward to seeing you again %optional_time_frame%. If you require any support in the meantime, please don't hesitate to contact us.
+Refer~We look forward to hearing from you soon. If you require any support in the meantime, please don't hesitate to contact us.

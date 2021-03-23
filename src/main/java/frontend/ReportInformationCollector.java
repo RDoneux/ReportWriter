@@ -428,7 +428,7 @@ public class ReportInformationCollector extends JPanel {
             participantName.setText("");
             organisation.setText("");
 
-            new ReportManager().generateReport(Objects.requireNonNull(details));
+            if(!new ReportManager().generateReport(Objects.requireNonNull(details))) errorMessage.setText("Error exporting file");
 
             try {
                 if (openDocumentOnceCreated.isSelected()) {

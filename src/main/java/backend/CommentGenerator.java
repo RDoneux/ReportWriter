@@ -54,6 +54,7 @@ public class CommentGenerator {
             String[] splitLine = line.split("~");
             openingStatements.add(splitLine[0], splitLine[1]);
         }
+        scan.close();
         scan = new Scanner(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream(defaultFileLocation +
                 "/TheoryAssessmentStatements.txt")));
         theoryAssessmentStatements = new MultipleEntityMap<>();
@@ -63,6 +64,7 @@ public class CommentGenerator {
             String[] splitLine = line.split("~");
             theoryAssessmentStatements.add(splitLine[0], splitLine[1]);
         }
+        scan.close();
         scan = new Scanner(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream(defaultFileLocation +
                 "/Audit-basedInterventionStatements.txt")));
         physicalInterventionStatements = new MultipleEntityMap<>();
@@ -72,6 +74,7 @@ public class CommentGenerator {
             String[] splitLine = line.split("~");
             physicalInterventionStatements.add(splitLine[0], splitLine[1]);
         }
+        scan.close();
         scan = new Scanner(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream(defaultFileLocation +
                 "/PortfolioStatements.txt")));
         portfolioStatements = new MultipleEntityMap<>();
@@ -81,6 +84,7 @@ public class CommentGenerator {
             String[] splitLine = line.split("~");
             portfolioStatements.add(splitLine[0], splitLine[1]);
         }
+        scan.close();
         scan = new Scanner(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream(defaultFileLocation +
                 "/ClosingStatements.txt")));
         closingStatements = new MultipleEntityMap<>();
@@ -90,6 +94,7 @@ public class CommentGenerator {
             String[] splitLine = line.split("~");
             closingStatements.add(splitLine[0], splitLine[1]);
         }
+        scan.close();
     }
 
     private void loadAdditionalStatementsIfCreated() throws FileNotFoundException {

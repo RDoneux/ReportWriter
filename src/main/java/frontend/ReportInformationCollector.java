@@ -5,6 +5,8 @@ import backend.ReportDetails;
 import backend.ReportManager;
 import backend.constant.SettingsConstant;
 import frontend.setting.SettingsButton;
+
+import org.apache.batik.ext.swing.GridBagConstants;
 import org.jdatepicker.JDatePicker;
 
 import javax.swing.*;
@@ -75,7 +77,7 @@ public class ReportInformationCollector extends JPanel {
         auditBasedInterventions.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                //EMPTY
+                // EMPTY
             }
 
             @Override
@@ -87,17 +89,17 @@ public class ReportInformationCollector extends JPanel {
 
             @Override
             public void mouseReleased(MouseEvent e) {
-                //EMPTY
+                // EMPTY
             }
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                //EMPTY
+                // EMPTY
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                //EMPTY
+                // EMPTY
             }
         });
 
@@ -107,7 +109,7 @@ public class ReportInformationCollector extends JPanel {
         presentation.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                //EMPTY
+                // EMPTY
             }
 
             @Override
@@ -119,17 +121,17 @@ public class ReportInformationCollector extends JPanel {
 
             @Override
             public void mouseReleased(MouseEvent e) {
-                //EMPTY
+                // EMPTY
             }
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                //EMPTY
+                // EMPTY
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                //EMPTY
+                // EMPTY
             }
         });
 
@@ -139,7 +141,7 @@ public class ReportInformationCollector extends JPanel {
         portfolio.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                //EMPTY
+                // EMPTY
             }
 
             @Override
@@ -151,17 +153,17 @@ public class ReportInformationCollector extends JPanel {
 
             @Override
             public void mouseReleased(MouseEvent e) {
-                //EMPTY
+                // EMPTY
             }
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                //EMPTY
+                // EMPTY
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                //EMPTY
+                // EMPTY
             }
         });
 
@@ -169,7 +171,7 @@ public class ReportInformationCollector extends JPanel {
         theoryAssessmentDisplay.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                //EMPTY
+                // EMPTY
             }
 
             @Override
@@ -186,17 +188,17 @@ public class ReportInformationCollector extends JPanel {
 
             @Override
             public void mouseReleased(MouseEvent e) {
-                //EMPTY
+                // EMPTY
             }
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                //EMPTY
+                // EMPTY
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                //EMPTY
+                // EMPTY
             }
         });
 
@@ -204,7 +206,7 @@ public class ReportInformationCollector extends JPanel {
         theoryAssessment.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                //EMPTY
+                // EMPTY
             }
 
             @Override
@@ -221,17 +223,17 @@ public class ReportInformationCollector extends JPanel {
 
             @Override
             public void mouseReleased(MouseEvent e) {
-                //EMPTY
+                // EMPTY
             }
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                //EMPTY
+                // EMPTY
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                //EMPTY
+                // EMPTY
             }
         });
 
@@ -251,11 +253,13 @@ public class ReportInformationCollector extends JPanel {
         });
 
         fileLocationDisplay = new JLabel(shortenString(SettingsConstant.get("File Location")));
+        fileLocationDisplay.setAlignmentX(JLabel.CENTER_ALIGNMENT);
+        fileLocationDisplay.setAlignmentY(JLabel.CENTER_ALIGNMENT);
         fileLocation = SettingsConstant.get("File Location");
         fileLocationDisplay.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                //EMPTY
+                // EMPTY
             }
 
             @Override
@@ -267,7 +271,7 @@ public class ReportInformationCollector extends JPanel {
 
             @Override
             public void mouseReleased(MouseEvent e) {
-                //EMPTY
+                // EMPTY
             }
 
             @Override
@@ -283,7 +287,8 @@ public class ReportInformationCollector extends JPanel {
 
         fileChooser = new JFileChooser();
         fileChooser.addActionListener(e -> {
-            if(e.getActionCommand().equals("CancelSelection")) return;
+            if (e.getActionCommand().equals("CancelSelection"))
+                return;
             fileLocation = fileChooser.getSelectedFile().getAbsolutePath();
             fileLocationDisplay.setText(shortenString(fileChooser.getSelectedFile().getAbsolutePath()));
             SettingsConstant.getInstance().add("File Location", fileChooser.getSelectedFile().getAbsolutePath());
@@ -301,6 +306,7 @@ public class ReportInformationCollector extends JPanel {
         GridBagConstraints c = new GridBagConstraints();
 
         c.weighty = 1;
+        //c.weightx = 1;
         c.anchor = GridBagConstraints.EAST;
         add(new JLabel("Candidate Name: "), c);
 
@@ -323,14 +329,24 @@ public class ReportInformationCollector extends JPanel {
         c.anchor = GridBagConstraints.WEST;
         c.gridx = 0;
         c.gridwidth = 1;
+        c.insets = new Insets(0, 20, 0, 0);
         add(new SettingsButton(), c);
 
-        c.gridy = 7;
+        c.gridy = 0;
+        c.gridx = 2;
+        c.gridheight = 10;
+        c.weightx = 1;
+        c.insets = new Insets(0, 0, 0, 3);
+        c.anchor = GridBagConstants.CENTER;
+        fileLocationDisplay.setUI(new VerticalLabelUI(true));
         add(fileLocationDisplay, c);
 
         c.anchor = GridBagConstraints.EAST;
         c.gridx = 1;
         c.gridy = 5;
+        //c.weightx = 1;
+        c.gridheight = 1;
+        c.insets = new Insets(0, 0, 0, 0);
         add(auditBasedInterventions, c);
 
         c.gridy = 6;
@@ -356,7 +372,7 @@ public class ReportInformationCollector extends JPanel {
 
         c.gridy = 0;
         c.gridwidth = 1;
-        c.anchor = GridBagConstraints.WEST;
+        c.anchor = GridBagConstraints.EAST;
         c.insets = new Insets(0, 0, 0, 0);
         add(participantName, c);
 
@@ -377,21 +393,23 @@ public class ReportInformationCollector extends JPanel {
     }
 
     private String shortenString(String string) {
-        return (string.length() > 12) ? "..." + string.substring(string.length() - 12) : string;
+        return (string.length() > 36) ? "..." + string.substring(string.length() - 36) : string;
     }
 
     public static void setUpTheoryAssessmentScore() {
-        if (theoryAssessment == null) theoryAssessment = new JComboBox<>();
+        if (theoryAssessment == null)
+            theoryAssessment = new JComboBox<>();
         theoryAssessment.removeAllItems();
         for (int i = 0; i <= Integer.parseInt(SettingsConstant.get("Test Total")); i++) {
             theoryAssessment.addItem(i);
         }
     }
 
-
     private void generateReport() {
 
-        if (participantName.getText().isEmpty() || organisation.getText().isEmpty() || courseAttended.getText().isEmpty() || courseDate.getFormattedTextField().getText().isEmpty() || coTrainer.getText().isEmpty()) {
+        if (participantName.getText().isEmpty() || organisation.getText().isEmpty()
+                || courseAttended.getText().isEmpty() || courseDate.getFormattedTextField().getText().isEmpty()
+                || coTrainer.getText().isEmpty()) {
             errorMessage.setText("Empty fields detected");
             return;
         }
@@ -413,15 +431,12 @@ public class ReportInformationCollector extends JPanel {
         new Thread(() -> {
             ReportDetails details = null;
             try {
-                details = ReportDetails.builder()
-                        .participantName(participantName.getText())
-                        .organisation(organisation.getText())
-                        .courseAttended(courseAttended.getText())
-                        .courseDate(new SimpleDateFormat("dd/MM/yyyy").format(new SimpleDateFormat("dd MMM yyyy").parse(courseDate.getFormattedTextField().getText())))
-                        .coTrainer(coTrainer.getText())
-                        .auditBasedInterventions(auditBasedInterventions.isSelected())
-                        .presentation(presentation.isSelected())
-                        .portfolio(portfolio.isSelected())
+                details = ReportDetails.builder().participantName(participantName.getText())
+                        .organisation(organisation.getText()).courseAttended(courseAttended.getText())
+                        .courseDate(new SimpleDateFormat("dd/MM/yyyy").format(new SimpleDateFormat("dd MMM yyyy")
+                                .parse(courseDate.getFormattedTextField().getText())))
+                        .coTrainer(coTrainer.getText()).auditBasedInterventions(auditBasedInterventions.isSelected())
+                        .presentation(presentation.isSelected()).portfolio(portfolio.isSelected())
                         .theoryAssessment(Integer.valueOf(theoryAssessment.getSelectedItem().toString()))
                         .saveLocation(fileLocation + "\\" + participantName.getText() + " ~ Record Sheet.docx")
                         .reportComponents(new ReportComponents(portfolio.isEnabled(), theoryAssessment.isEnabled(),
@@ -434,7 +449,7 @@ public class ReportInformationCollector extends JPanel {
             participantName.setText("");
             organisation.setText("");
 
-            if(new ReportManager().generateReport(Objects.requireNonNull(details))) {
+            if (new ReportManager().generateReport(Objects.requireNonNull(details))) {
                 errorMessage.setForeground(Color.RED);
                 errorMessage.setText("");
             } else {

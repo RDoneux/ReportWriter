@@ -24,10 +24,10 @@ public class SettingsButton extends JLabel implements MouseListener {
         try {
             unselected =
                     new ImageIcon((ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("images" +
-                            "\\SettingsImage.png")))).getScaledInstance(20, 20, BufferedImage.SCALE_SMOOTH));
+                            "/SettingsImage.png")))).getScaledInstance(20, 20, BufferedImage.SCALE_SMOOTH));
             selected =
                     new ImageIcon((ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("images" +
-                            "\\SettingsImageSelected.png")))).getScaledInstance(20, 20, BufferedImage.SCALE_SMOOTH));
+                            "/SettingsImageSelected.png")))).getScaledInstance(20, 20, BufferedImage.SCALE_SMOOTH));
         } catch (IOException e) {
             e.printStackTrace();
         }

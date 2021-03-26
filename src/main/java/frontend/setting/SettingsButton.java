@@ -1,9 +1,10 @@
 package frontend.setting;
 
-import frontend.ApplicationWindow;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
+
+import frontend.ApplicationWindow;
+
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
@@ -22,12 +23,12 @@ public class SettingsButton extends JLabel implements MouseListener {
     public SettingsButton() {
         addMouseListener(this);
         try {
-            unselected =
-                    new ImageIcon((ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("images" +
-                            "/SettingsImage.png")))).getScaledInstance(20, 20, BufferedImage.SCALE_SMOOTH));
-            selected =
-                    new ImageIcon((ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("images" +
-                            "/SettingsImageSelected.png")))).getScaledInstance(20, 20, BufferedImage.SCALE_SMOOTH));
+            unselected = new ImageIcon((ImageIO.read(Objects.requireNonNull(
+                    this.getClass().getClassLoader().getResourceAsStream("images" + "/SettingsImage.png"))))
+                            .getScaledInstance(20, 20, BufferedImage.SCALE_SMOOTH));
+            selected = new ImageIcon((ImageIO.read(Objects.requireNonNull(
+                    this.getClass().getClassLoader().getResourceAsStream("images" + "/SettingsImageSelected.png"))))
+                            .getScaledInstance(20, 20, BufferedImage.SCALE_SMOOTH));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -36,7 +37,7 @@ public class SettingsButton extends JLabel implements MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        //EMPTY
+        // EMPTY
     }
 
     @Override
@@ -46,7 +47,7 @@ public class SettingsButton extends JLabel implements MouseListener {
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        //EMPTY
+        // EMPTY
     }
 
     @Override

@@ -1,10 +1,12 @@
 package frontend.setting;
 
 import backend.constant.SettingsConstant;
-import frontend.ApplicationWindow;
 import frontend.ReportInformationCollector;
 
 import javax.swing.*;
+
+import frontend.ApplicationWindow;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,7 +19,7 @@ public class SaveSettings extends JButton implements ActionListener {
     private static final long serialVersionUID = 1L;
     private final SettingsPage settingsPage;
 
-    public SaveSettings(SettingsPage settingsPage){
+    public SaveSettings(SettingsPage settingsPage) {
         this.settingsPage = settingsPage;
         setText("Save Settings");
         setPreferredSize(new Dimension(142, 20));

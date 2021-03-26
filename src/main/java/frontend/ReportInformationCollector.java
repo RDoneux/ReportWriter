@@ -306,7 +306,7 @@ public class ReportInformationCollector extends JPanel {
         GridBagConstraints c = new GridBagConstraints();
 
         c.weighty = 1;
-        //c.weightx = 1;
+        // c.weightx = 1;
         c.anchor = GridBagConstraints.EAST;
         add(new JLabel("Candidate Name: "), c);
 
@@ -344,7 +344,7 @@ public class ReportInformationCollector extends JPanel {
         c.anchor = GridBagConstraints.EAST;
         c.gridx = 1;
         c.gridy = 5;
-        //c.weightx = 1;
+        // c.weightx = 1;
         c.gridheight = 1;
         c.insets = new Insets(0, 0, 0, 0);
         add(auditBasedInterventions, c);

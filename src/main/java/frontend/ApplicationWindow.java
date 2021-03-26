@@ -16,10 +16,18 @@ public class ApplicationWindow {
     private static ApplicationWindow applicationWindow;
 
     private ApplicationWindow() {
-        //EMPTY
+        // EMPTY
     }
 
     public void display() {
+
+        try {
+            frame.setIconImage(ImageIO.read(
+                    Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("images/Icon.png"))));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         frame.setTitle("Report Builder");
         frame.setSize(new Dimension(Integer.parseInt(SettingsConstant.get("Window Width")),
                 Integer.parseInt(SettingsConstant.get("Window Height"))));
@@ -29,11 +37,7 @@ public class ApplicationWindow {
         frame.setVisible(true);
         frame.setLayout(new BorderLayout());
 
-        try {
-            frame.setIconImage(ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("images/Icon.png"))));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
 
         add(new ReportInformationCollector());
         frame.add(new Signature(), BorderLayout.SOUTH);

@@ -7,6 +7,7 @@ import frontend.ReportInformationCollector;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+
 import java.awt.*;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
@@ -41,16 +42,15 @@ public class SettingsPage extends JPanel {
 
         JLabel backIcon = new JLabel();
         try {
-            ImageIcon unselectedBackIcon =
-                    new ImageIcon(ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream(
-                    "images/BackIcon.png"))));
-            ImageIcon selectedBackIcon = new ImageIcon(ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream(
-                    "images/BackIconSelected.png"))));
+            ImageIcon unselectedBackIcon = new ImageIcon(ImageIO.read(Objects
+                    .requireNonNull(this.getClass().getClassLoader().getResourceAsStream("images/BackIcon.png"))));
+            ImageIcon selectedBackIcon = new ImageIcon(ImageIO.read(Objects.requireNonNull(
+                    this.getClass().getClassLoader().getResourceAsStream("images/BackIconSelected.png"))));
             backIcon.setIcon(unselectedBackIcon);
             backIcon.addMouseListener(new MouseListener() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    //EMPTY
+                    // EMPTY
                 }
 
                 @Override
@@ -60,7 +60,7 @@ public class SettingsPage extends JPanel {
 
                 @Override
                 public void mouseReleased(MouseEvent e) {
-                    //EMPTY
+                    // EMPTY
                 }
 
                 @Override
@@ -113,17 +113,17 @@ public class SettingsPage extends JPanel {
 
             @Override
             public void componentMoved(ComponentEvent e) {
-                //EMPTY
+                // EMPTY
             }
 
             @Override
             public void componentShown(ComponentEvent e) {
-                //EMPTY
+                // EMPTY
             }
 
             @Override
             public void componentHidden(ComponentEvent e) {
-                //EMPTY
+                // EMPTY
             }
         });
 
@@ -132,30 +132,30 @@ public class SettingsPage extends JPanel {
         additionalCommentArea.setWrapStyleWord(true);
         additionalCommentArea.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
-        additionalCommentOption = new JComboBox<>(new String[]{"Opening Statement", "Exam Statement", "PI Statement"
-                , "Portfolio Statement", "Closing Statement"});
+        additionalCommentOption = new JComboBox<>(new String[] { "Opening Statement", "Exam Statement", "PI Statement",
+                "Portfolio Statement", "Closing Statement" });
         additionalCommentOption.addActionListener(e -> {
 
             keySelector.removeAllItems();
             keySelector.setEnabled(true);
             switch (additionalCommentOption.getSelectedItem().toString()) {
-                case "Opening Statement":
-                case "PI Statement":
-                    keySelector.setEnabled(false);
-                    break;
-                case "Exam Statement":
-                    keySelector.addItem("Perfect");
-                    keySelector.addItem("Pass");
-                    keySelector.addItem("Borderline");
-                    keySelector.addItem("Refer");
-                    break;
-                case "Closing Statement":
-                case "Portfolio Statement":
-                    keySelector.addItem("Pass");
-                    keySelector.addItem("Refer");
-                    break;
-                default:
-                    break;
+            case "Opening Statement":
+            case "PI Statement":
+                keySelector.setEnabled(false);
+                break;
+            case "Exam Statement":
+                keySelector.addItem("Perfect");
+                keySelector.addItem("Pass");
+                keySelector.addItem("Borderline");
+                keySelector.addItem("Refer");
+                break;
+            case "Closing Statement":
+            case "Portfolio Statement":
+                keySelector.addItem("Pass");
+                keySelector.addItem("Refer");
+                break;
+            default:
+                break;
             }
         });
 
@@ -167,28 +167,32 @@ public class SettingsPage extends JPanel {
         commitComment.setMaximumSize(new Dimension(142, 20));
         commitComment.setMinimumSize(new Dimension(142, 20));
         commitComment.addActionListener(e -> {
-            if (additionalCommentArea.getText().isEmpty()) return;
+            if (additionalCommentArea.getText().isEmpty())
+                return;
             try {
                 AdditionalCommentGenerator additionalCommentGenerator = new AdditionalCommentGenerator();
                 switch (additionalCommentOption.getSelectedItem().toString()) {
-                    case "Opening Statement":
-                        additionalCommentGenerator.addAdditionalOpeningStatement(additionalCommentArea.getText());
-                        break;
-                    case "Exam Statement":
-                        additionalCommentGenerator.addAdditionalTheoryAssessmentStatement(keySelector.getSelectedItem().toString(), additionalCommentArea.getText());
-                        break;
-                    case "PI Statement":
-                        additionalCommentGenerator.addAdditionalAuditBasedInterventionAssessment(additionalCommentArea.getText());
-                        break;
-                    case "Portfolio Statement":
-                        additionalCommentGenerator.addAdditionalPortfolioStatement(keySelector.getSelectedItem().toString(), additionalCommentArea.getText());
-                        break;
-                    case "Closing Statement":
-                        additionalCommentGenerator.addAdditionalClosingStatement(keySelector
-                                .getSelectedItem().toString(), additionalCommentArea.getText());
-                        break;
-                    default:
-                        break;
+                case "Opening Statement":
+                    additionalCommentGenerator.addAdditionalOpeningStatement(additionalCommentArea.getText());
+                    break;
+                case "Exam Statement":
+                    additionalCommentGenerator.addAdditionalTheoryAssessmentStatement(
+                            keySelector.getSelectedItem().toString(), additionalCommentArea.getText());
+                    break;
+                case "PI Statement":
+                    additionalCommentGenerator
+                            .addAdditionalAuditBasedInterventionAssessment(additionalCommentArea.getText());
+                    break;
+                case "Portfolio Statement":
+                    additionalCommentGenerator.addAdditionalPortfolioStatement(keySelector.getSelectedItem().toString(),
+                            additionalCommentArea.getText());
+                    break;
+                case "Closing Statement":
+                    additionalCommentGenerator.addAdditionalClosingStatement(keySelector.getSelectedItem().toString(),
+                            additionalCommentArea.getText());
+                    break;
+                default:
+                    break;
                 }
                 additionalCommentArea.setText("");
             } catch (IOException e1) {

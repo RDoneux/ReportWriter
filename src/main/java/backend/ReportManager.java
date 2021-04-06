@@ -12,13 +12,13 @@ import java.util.Objects;
 public class ReportManager {
 
     public ReportManager() {
-        //EMPTY
+        // EMPTY
     }
 
     public boolean generateReport(ReportDetails reportDetails) {
         try {
-            XWPFDocument doc =
-                    new XWPFDocument(OPCPackage.open(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("documents/General - Record Sheet V1.docx"))));
+            XWPFDocument doc = new XWPFDocument(OPCPackage.open(Objects.requireNonNull(
+                    this.getClass().getClassLoader().getResourceAsStream("documents/General - Record Sheet V1.docx"))));
 
             XWPFTable details = doc.getTableArray(0);
             completeDetails(details, reportDetails.getParticipantName(), reportDetails.getOrganisation(),
@@ -26,8 +26,8 @@ public class ReportManager {
 
             XWPFTable assessmentOutcome = doc.getTableArray(1);
             completeAssessmentOutcome(assessmentOutcome, reportDetails.getAuditBasedInterventions(),
-                    reportDetails.getPresentation(), reportDetails.getPortfolio(),
-                    reportDetails.getTheoryAssessment(), reportDetails.getReportComponents());
+                    reportDetails.getPresentation(), reportDetails.getPortfolio(), reportDetails.getTheoryAssessment(),
+                    reportDetails.getReportComponents());
 
             XWPFTable comments = doc.getTableArray(2);
             completeComments(comments, assessmentOutcome, details, reportDetails.getCoTrainer(),
@@ -46,14 +46,14 @@ public class ReportManager {
             document.write(out);
             out.close();
             document.close();
-        } catch (FileNotFoundException e){
+        } catch (FileNotFoundException e) {
             return false;
         }
         return true;
     }
 
-    private void completeDetails(XWPFTable target, String inputName, String inputOrganisation, String inputCourseAttended,
-                                 String inputCourseDate) {
+    private void completeDetails(XWPFTable target, String inputName, String inputOrganisation,
+            String inputCourseAttended, String inputCourseDate) {
 
         XWPFTableCell name = target.getRow(0).getCell(1);
         XWPFTableCell organisation = target.getRow(1).getCell(1);
@@ -84,7 +84,7 @@ public class ReportManager {
         pi.setText(Boolean.TRUE.equals((inputReportContents.getAuditBasedInterventions())) ? (inputPi) ? "Pass" : "Refer" : "N/A");
         presentation.setText(Boolean.TRUE.equals((inputReportContents.getPresentation())) ? (inputPresentation) ? "Pass" : "Refer" : "N/A");
         portfolio.setText(Boolean.TRUE.equals((inputReportContents.getPortfolio())) ? (inputPortfolio) ? "Pass" : "Refer" : "N/A");
-        theoryAssessmentScore.setText(Boolean.TRUE.equals((inputReportContents.getTheoryAssessment())) ? inputTheoryAssessment + " / 40" : "");
+        theoryAssessmentScore.setText(Boolean.TRUE.equals((inputReportContents.getTheoryAssessment())) ? inputTheoryAssessment + " / " + SettingsConstant.get("Test Total")  : "");
         if (Boolean.TRUE.equals(inputReportContents.getTheoryAssessment())) {
             if (inputTheoryAssessment > (theoryAssessmentPassMark * theoryAssessmentTotal)) theoryAssessmentOutcome.setText("Pass");
             else if (inputTheoryAssessment > (theoryAssessmentBorderlinePassMark * theoryAssessmentTotal)) theoryAssessmentOutcome.setText("Borderline Pass");
@@ -98,26 +98,26 @@ public class ReportManager {
         if (Boolean.TRUE.equals(inputReportContents.getPresentation()) && Boolean.FALSE.equals(inputPresentation)) overallOutcomeBoolean = false;
         if (Boolean.TRUE.equals(inputReportContents.getTheoryAssessment()) && Boolean.FALSE.equals((inputTheoryAssessment > (theoryAssessmentBorderlinePassMark * theoryAssessmentTotal))))
             overallOutcomeBoolean = false;
+            if(Boolean.TRUE.equals(inputReportContents.getPortfolio() && Boolean.FALSE.equals(inputPortfolio))) overallOutcomeBoolean = false;
 
         overallOutcome.setText((overallOutcomeBoolean) ? "Pass" : "Refer");
 
     }
 
     private void completeComments(XWPFTable target, XWPFTable inputAssessmentOutcome, XWPFTable inputDetails,
-                                  String coTrainer, ReportComponents reportComponents) throws IOException,
-            InvalidFormatException {
+            String coTrainer, ReportComponents reportComponents) throws IOException, InvalidFormatException {
 
         String overallOutcome = inputAssessmentOutcome.getRow(5).getCell(1).getText();
         String auditBasedInterventionOutcome = inputAssessmentOutcome.getRow(1).getCell(1).getText();
         String instructorName = inputDetails.getRow(0).getCell(1).getText();
         String courseTitle = inputDetails.getRow(2).getCell(1).getText();
         String courseDate = inputDetails.getRow(3).getCell(1).getText();
-        String theoryAssessmentScore =
-                inputAssessmentOutcome.getRow(4).getCell(1).getText().split(" / ")[0];
+        String theoryAssessmentScore = inputAssessmentOutcome.getRow(4).getCell(1).getText().split(" / ")[0];
         Boolean portfolioOutcome = (inputAssessmentOutcome.getRow(3).getCell(1)).getText().equals("Pass");
 
-        String[] paragraphs = new CommentGenerator().generateComments(overallOutcome, auditBasedInterventionOutcome, instructorName, courseTitle,
-                courseDate, theoryAssessmentScore, portfolioOutcome, reportComponents).split("\\r?\\n");
+        String[] paragraphs = new CommentGenerator().generateComments(overallOutcome, auditBasedInterventionOutcome,
+                instructorName, courseTitle, courseDate, theoryAssessmentScore, portfolioOutcome, reportComponents)
+                .split("\\r?\\n");
         for (String paragraph : paragraphs) {
             XWPFRun run = target.getRow(1).getCell(0).addParagraph().createRun();
             run.setText(paragraph);
@@ -130,7 +130,7 @@ public class ReportManager {
         XWPFParagraph signatureParagraph = target.getRow(3).getCell(0).getParagraphArray(0);
         XWPFRun signatureRun = signatureParagraph.createRun();
         signatureParagraph.setAlignment(ParagraphAlignment.CENTER);
-        if(SettingsConstant.get("Lead Instructor").equals("Rob Doneux")) {
+        if (SettingsConstant.get("Lead Instructor").equals("Rob Doneux")) {
             InputStream is = this.getClass().getClassLoader().getResourceAsStream("signatures/RobDoneuxSignature.png");
             signatureRun.addPicture(is, XWPFDocument.PICTURE_TYPE_PNG, "RobDoneuxSignature.png", Units.toEMU(125),
                     Units.toEMU(42));
